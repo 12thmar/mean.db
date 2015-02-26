@@ -1,14 +1,19 @@
 FROM ubuntu:14.04
 
-RUN apt-get update && apt-get upgrade -y
+# Installation:
+# Import MongoDB public GPG key AND create a MongoDB list file
+RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10
+RUN echo 'deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen' | tee /etc/apt/sources.list.d/10gen.list
 
-RUN apt-get install -y git git-core wget zip nodejs npm
+# Update apt-get sources AND install MongoDB
 
-RUN npm install bower nodemon -g
+ENV MONGO_VERSION 2.2.7
+RUN apt-get update && apt-get install -y mongodb-org=$MONGO_VERSION mongodb-org-server=$MONGO_VERSION mongodb-org-shell=$MONGO_VERSION mongodb-org-mongos=$MONGO_VERSION mongodb-org-tools=$MONGO_VERSION
 
-EXPOSE 8080
+VOLUME /data/db
 
-# startup
-#ADD start.sh /tmp/  
-#RUN chmod +x /tmp/start.sh  
-#CMD ./tmp/start.sh 
+COPY docker-entrypoint.sh /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]
+
+EXPOSE 27017
+CMD ["mongod"]
