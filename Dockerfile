@@ -7,7 +7,7 @@ RUN echo 'deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen
 
 # Update apt-get sources AND install MongoDB
 
-ENV MONGO_VERSION 2.2.7
+ENV MONGO_VERSION 2.6.7
 RUN apt-get update && apt-get install -y mongodb-org=$MONGO_VERSION mongodb-org-server=$MONGO_VERSION mongodb-org-shell=$MONGO_VERSION mongodb-org-mongos=$MONGO_VERSION mongodb-org-tools=$MONGO_VERSION
 
 VOLUME /data/db
